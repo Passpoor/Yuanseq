@@ -83,6 +83,16 @@ shiny::runApp("app.R")
 
 ---
 
+## 开发者 | Developer
+
+**开发者 Developer:** 乔宇 Yu Qiao  
+**单位 Affiliation:** 上海交通大学药学院 · 药理学博士  
+School of Pharmacy, Shanghai Jiao Tong University · PhD in Pharmacology  
+
+**导师 Supervisors:** 钱峰教授 Prof. Feng Qian、孙磊教授 Prof. Lei Sun  
+
+---
+
 ## 许可证 | License
 
 MIT License. See [LICENSE](LICENSE) for details.

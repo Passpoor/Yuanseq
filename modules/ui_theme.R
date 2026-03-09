@@ -530,6 +530,7 @@ landing_ui <- tagList(
 
 main_app_ui <- function(initial_theme) {
 
+  tagList(
   navbarPage(
     title = tagList(
     # Logo显示（更大尺寸）
@@ -1399,6 +1400,14 @@ main_app_ui <- function(initial_theme) {
                  )
                )
              )
+    ),
+    # 开发者信息 Developer credits（双语）
+    tags$div(
+      class = "xseq-developer-footer",
+      style = "padding: 12px 15px; text-align: center; font-size: 12px; color: #6c757d; border-top: 1px solid #dee2e6; margin-top: 8px; background: rgba(0,0,0,0.02);",
+      tags$p(style = "margin: 0; font-weight: 600;", "开发者 Developer: 乔宇 Yu Qiao"),
+      tags$p(style = "margin: 2px 0 0 0;", "上海交通大学药学院 · 药理学博士 | School of Pharmacy, Shanghai Jiao Tong University · PhD in Pharmacology"),
+      tags$p(style = "margin: 4px 0 0 0;", "导师 Supervisors: 钱峰教授 Prof. Feng Qian、孙磊教授 Prof. Lei Sun")
     )
   )
 }

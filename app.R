@@ -1,7 +1,9 @@
 # =====================================================
-# BioFastFree v11.1 (Enhanced Modular Version)
-# Author: 乔宇 (Enhanced by Claude AI)
-# Status: Complete with Fixed Differential Analysis
+# Xseq / BioFastFree
+# 开发者 Developer: 乔宇 Yu Qiao
+# 上海交通大学药学院 药理学博士
+# PhD in Pharmacology, School of Pharmacy, Shanghai Jiao Tong University
+# 导师 Supervisors: 钱峰教授 Prof. Feng Qian、孙磊教授 Prof. Lei Sun
 # =====================================================
 
 # 设置上传大小限制

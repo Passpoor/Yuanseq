@@ -43,6 +43,18 @@ body {
     }
 }
 
+/* 开发者页脚链接 */
+.xseq-developer-footer a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+.xseq-developer-footer a:hover {
+    text-decoration: underline;
+}
+.dark-mode .xseq-developer-footer a {
+    color: #6ea8fe;
+}
+
 /* 夜间模式 - 添加微妙渐变背景 */
 .dark-mode {
     background: linear-gradient(135deg, #1C1C1E 0%, #252528 50%, #1C1C1E 100%) !important;  /* 🔥 深色模式渐变 */
@@ -1401,13 +1413,18 @@ main_app_ui <- function(initial_theme) {
                )
              )
     ),
-    # 开发者信息 Developer credits（双语）
+    # 开发者信息 Developer credits（双语，导师链接至学院主页）
     tags$div(
       class = "xseq-developer-footer",
       style = "padding: 12px 15px; text-align: center; font-size: 12px; color: #6c757d; border-top: 1px solid #dee2e6; margin-top: 8px; background: rgba(0,0,0,0.02);",
       tags$p(style = "margin: 0; font-weight: 600;", "开发者 Developer: 乔宇 Yu Qiao"),
       tags$p(style = "margin: 2px 0 0 0;", "上海交通大学药学院 · 药理学博士 | School of Pharmacy, Shanghai Jiao Tong University · PhD in Pharmacology"),
-      tags$p(style = "margin: 4px 0 0 0;", "导师 Supervisors: 钱峰教授 Prof. Feng Qian、孙磊教授 Prof. Lei Sun")
+      tags$p(style = "margin: 4px 0 0 0;",
+              "导师 Supervisors: ",
+              tags$a(href = "https://pharm.sjtu.edu.cn/szdy/2862.html", target = "_blank", rel = "noopener noreferrer", "钱峰教授 Prof. Feng Qian"),
+              "、",
+              tags$a(href = "https://pharm.sjtu.edu.cn/szdy/2870.html", target = "_blank", rel = "noopener noreferrer", "孙磊教授 Prof. Lei Sun")
+      )
     )
   )
 }

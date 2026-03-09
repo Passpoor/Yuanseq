@@ -4,6 +4,10 @@ Xseq is a web-based R/Shiny platform for comprehensive bioinformatics analysis o
 
 **Repository:** [https://github.com/Passpoor/Xseq0.1](https://github.com/Passpoor/Xseq0.1)
 
+**开发者 Developer:** 乔宇 Yu Qiao · 上海交通大学药学院 药理学博士 | School of Pharmacy, Shanghai Jiao Tong University · PhD in Pharmacology  
+
+**导师 Supervisors:** [钱峰教授 Prof. Feng Qian](https://pharm.sjtu.edu.cn/szdy/2862.html)、[孙磊教授 Prof. Lei Sun](https://pharm.sjtu.edu.cn/szdy/2870.html)
+
 ---
 
 ## 项目概述 | About
@@ -80,16 +84,6 @@ shiny::runApp("app.R")
 ├── tests/                # 测试
 └── docs/                 # 文档
 ```
-
----
-
-## 开发者 | Developer
-
-**开发者 Developer:** 乔宇 Yu Qiao  
-**单位 Affiliation:** 上海交通大学药学院 · 药理学博士  
-School of Pharmacy, Shanghai Jiao Tong University · PhD in Pharmacology  
-
-**导师 Supervisors:** 钱峰教授 Prof. Feng Qian、孙磊教授 Prof. Lei Sun  
 
 ---
 

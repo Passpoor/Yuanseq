@@ -1,9 +1,11 @@
 # =====================================================
-# 快速启动脚本
+# 快速启动脚本 - YuanSeq
 # =====================================================
 
-# 设置工作目录
-setwd("D:/cherry_code/Biofree_project11.2/Biofree_project")
+# 设置工作目录：若当前目录无 app.R，则尝试上一级（便于在项目根或子目录运行）
+if (!file.exists("app.R")) {
+  if (file.exists("../app.R")) setwd("..") else stop("请在 YuanSeq 项目根目录运行 launch_app.R")
+}
 
 # 加载必要的包
 required_packages <- c("shiny", "clusterProfiler", "GseaVis",
@@ -21,7 +23,7 @@ for (pkg in required_packages) {
 
 # 启动应用
 cat("\n========================================\n")
-cat("🚀 启动Biofree应用\n")
+cat("🚀 启动 YuanSeq 应用\n")
 cat("========================================\n\n")
 
 cat("应用将在浏览器中打开...\n")

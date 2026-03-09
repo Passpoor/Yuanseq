@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================
-# BioFastFree Snakemake - 转录因子活性分析 (decoupleR)
+# YuanSeq Snakemake - 转录因子活性分析 (decoupleR)
 # =====================================================
 
 suppressPackageStartupMessages({

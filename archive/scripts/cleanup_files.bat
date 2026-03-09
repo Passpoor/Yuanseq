@@ -1,6 +1,15 @@
 @echo off
 chcp 65001 >nul
-cd /d "D:\cherry_code\Biofree_project11.2\Biofree_project"
+@echo off
+chcp 65001 >nul
+REM 从 archive\scripts 进入项目根目录
+cd /d "%~dp0"
+cd ..\..
+if not exist app.R (
+  echo 未找到 app.R，请确保在 YuanSeq 项目内运行本脚本
+  pause
+  exit /b 1
+)
 
 echo ======================================
 echo 开始清理项目文件...

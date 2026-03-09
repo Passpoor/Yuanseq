@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================
-# BioFastFree Snakemake - 火山图
+# YuanSeq Snakemake - 火山图
 # =====================================================
 
 suppressPackageStartupMessages({

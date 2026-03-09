@@ -5,7 +5,8 @@ library(dplyr)
 cat("=== 测试完整的KEGG/GO分析修复 ===\n\n")
 
 # 1. 设置工作目录
-setwd("D:/cherry_code/Biofree_project")
+# 请在 YuanSeq 项目根目录运行，或设置 setwd() 为你的项目路径
+if (file.exists("app.R")) setwd(getwd()) else if (file.exists("../app.R")) setwd("..")
 
 # 加载修复后的函数
 if (file.exists("modules/data_input.R")) {

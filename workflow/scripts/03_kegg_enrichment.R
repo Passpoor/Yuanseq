@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================
-# BioFastFree Snakemake - KEGG 富集分析
+# YuanSeq Snakemake - KEGG 富集分析
 # 优先 clusterProfiler::enrichKEGG，备选 biofree.qyKEGGtools
 # =====================================================
 

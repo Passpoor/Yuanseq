@@ -1,6 +1,6 @@
 @echo off
 echo ================================================
-echo    BioFastFree v11.0 - 启动脚本
+echo    YuanSeq - 启动脚本
 echo ================================================
 echo.
 
@@ -13,7 +13,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo 正在启动BioFastFree分析工具...
+echo 正在启动 YuanSeq 分析工具...
 echo.
 
 REM 运行应用

@@ -327,4 +327,4 @@ gsea_ranked_data <- reactive({
 **状态**: ✅ 可以投入使用
 **建议**: 进行完整的功能测试以验证所有修复
 **版本**: 3.1 Final
-**作者**: Biofree Development Team
+**作者**: YuanSeq / 上海交通大学药学院

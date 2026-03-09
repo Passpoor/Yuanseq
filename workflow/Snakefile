@@ -1,7 +1,7 @@
 # =====================================================
-# BioFastFree Snakemake Workflow
+# YuanSeq Snakemake Workflow
 # 转录组差异分析与功能富集 - 可复现命令行流程
-# 对应 BioFastFree Shiny 应用的逻辑架构
+# 对应 YuanSeq Shiny 应用的逻辑架构
 # =====================================================
 
 configfile: "config/config.yaml"
@@ -124,7 +124,7 @@ rule go_enrichment:
 
 # =====================================================
 # Rule: GSEA (需在 config 中设置 gsea.gmt_file)
-# 运行: snakemake results/biofastfree_gsea_results.csv
+# 运行: snakemake results/yuanseq_gsea_results.csv
 # =====================================================
 rule gsea_analysis:
     input:

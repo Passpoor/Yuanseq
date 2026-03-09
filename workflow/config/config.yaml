@@ -1,6 +1,6 @@
 # =====================================================
-# BioFastFree Snakemake Workflow Configuration
-# 对应 BioFastFree Shiny 应用的命令行可复现流程
+# YuanSeq Snakemake Workflow Configuration
+# 对应 YuanSeq Shiny 应用的命令行可复现流程
 # 路径相对于 workflow/ 目录
 # =====================================================
 
@@ -48,7 +48,7 @@ tf_activity:
   enabled: true
   method: "ulm"                  # ulm / mlm / wsum / viper
   min_genes: 5
-  collectri_dir: "."             # CollecTRI 网络文件目录，可设为 Biofree_project 根目录
+  collectri_dir: "."             # CollecTRI 网络文件目录，可设为 YuanSeq 项目根目录
 
 # --- 火山图 ---
 volcano:
@@ -60,4 +60,4 @@ volcano:
 # --- 输出 ---
 output:
   dir: "results"
-  prefix: "biofastfree"
+  prefix: "yuanseq"

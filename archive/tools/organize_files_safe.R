@@ -7,8 +7,14 @@ cat("========================================\n")
 cat("   安全文件整理 - 只复制，不删除\n")
 cat("========================================\n\n")
 
-# 设置工作目录
-setwd("D:/cherry_code/Biofree_project11.2/Biofree_project")
+# 设置工作目录：请在 YuanSeq 项目根目录运行，或修改为你的路径
+if (file.exists("app.R")) {
+  setwd(getwd())
+} else if (file.exists("../app.R")) {
+  setwd("..")
+} else {
+  stop("请在 YuanSeq 项目根目录运行 organize_files_safe.R")
+}
 
 # =====================================================
 # Step 1: 创建文件夹

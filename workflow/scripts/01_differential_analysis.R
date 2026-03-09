@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================
-# BioFastFree Snakemake - 差异分析 (limma-voom / edgeR)
+# YuanSeq Snakemake - 差异分析 (limma-voom / edgeR)
 # =====================================================
 
 suppressPackageStartupMessages({

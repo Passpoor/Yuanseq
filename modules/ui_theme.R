@@ -463,7 +463,7 @@ landing_ui <- tagList(
     tags$div(class="text-center", style="margin-bottom: 20px; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;",
              # Logo显示
              tags$img(src="logo.png",
-                      alt="Biofree Logo",
+                      alt="YuanSeq",
                       style="max-height: 300px; width: auto; object-fit: contain; margin-bottom: 20px;",
                       class="img-responsive",
                       id="main-logo"
@@ -472,8 +472,8 @@ landing_ui <- tagList(
              tags$h1(id="text-title",
                      class="text-center",
                      style="font-size: 28px; margin: 0; display: none;",
-                     span(style="color: #007AFF;", "Biofree"),
-                     span(style="color: #6E6E73; font-weight: normal;", "v12")
+                     span(style="color: #007AFF;", "YuanSeq"),
+                     span(style="color: #6E6E73; font-weight: normal;", " v1")
              ),
              # JavaScript处理logo加载和论文展开/折叠
              tags$script(HTML("
@@ -509,10 +509,10 @@ landing_ui <- tagList(
              "))
     ),
     
-    # biofree简介
+    # YuanSeq 简介
     tags$div(class="text-center", style="margin-bottom: 35px; color: #6E6E73;",
-             tags$p("专业的生物信息学分析平台", style="font-size: 18px; margin-bottom: 12px;"),
-             tags$p("提供RNAseq数据分析、差异表达分析、富集分析等一站式解决方案", style="font-size: 16px; margin-bottom: 0;")
+             tags$p("R/Shiny 转录组与芯片数据分析平台", style="font-size: 18px; margin-bottom: 12px;"),
+             tags$p("差异表达、KEGG/GO/GSEA 富集、通路与转录因子活性推断、交互可视化", style="font-size: 16px; margin-bottom: 0;")
     ),
 
     tags$hr(style="margin: 30px 0;"),
@@ -520,7 +520,7 @@ landing_ui <- tagList(
     # 项目信息
     tags$div(style="margin-bottom: 35px;",
              tags$h4("ℹ️ 项目信息", style="color: #007AFF; margin-bottom: 20px; font-size: 22px;"),
-             tags$p("• 版本：12", style="margin-bottom: 12px; font-size: 18px;"),
+             tags$p("• 版本：1", style="margin-bottom: 12px; font-size: 18px;"),
              tags$p("• 更新日期：2025年12月26日", style="margin-bottom: 0; font-size: 18px;")
     ),
 

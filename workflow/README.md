@@ -1,6 +1,6 @@
-# BioFastFree Snakemake Workflow
+# YuanSeq Snakemake Workflow
 
-转录组差异分析与功能富集的命令行可复现流程，对应 [BioFastFree](https://github.com/yourusername/BioFastFree) Shiny 应用的分析逻辑。
+转录组差异分析与功能富集的命令行可复现流程，对应 [YuanSeq](https://github.com/Passpoor/Xseq0.1) Shiny 应用的分析逻辑。
 
 ## 工作流结构
 
@@ -50,7 +50,7 @@ install.packages(c("dplyr", "ggplot2", "ggrepel", "decoupleR", "tidyr", "tibble"
 
 ```bash
 conda env create -f envs/environment.yaml
-conda activate biofastfree
+conda activate yuanseq
 ```
 
 ### 2. 安装 Snakemake
@@ -76,18 +76,18 @@ snakemake -j 4
 
 使用 4 个核心并行运行。首次运行会依次执行：
 
-1. 差异分析 → `results/biofastfree_deg_results.csv`
-2. 火山图 → `results/biofastfree_volcano.pdf`
-3. KEGG 富集 → `results/biofastfree_kegg_enrichment.csv` + 点图
-4. GO 富集 → `results/biofastfree_go_enrichment.csv` + 点图
-5. TF 活性 → `results/biofastfree_tf_activity.csv` + 图
+1. 差异分析 → `results/yuanseq_deg_results.csv`
+2. 火山图 → `results/yuanseq_volcano.pdf`
+3. KEGG 富集 → `results/yuanseq_kegg_enrichment.csv` + 点图
+4. GO 富集 → `results/yuanseq_go_enrichment.csv` + 点图
+5. TF 活性 → `results/yuanseq_tf_activity.csv` + 图
 
 ### 5. 可选：GSEA
 
 若需 GSEA，需提供 GMT 文件：
 
 1. 在 `config/config.yaml` 中设置 `gsea.gmt_file: "data/your_pathways.gmt"`
-2. 运行：`snakemake results/biofastfree_gsea_results.csv`
+2. 运行：`snakemake results/yuanseq_gsea_results.csv`
 
 ## 配置说明
 
@@ -109,19 +109,19 @@ snakemake -j 4
 
 | 文件 | 说明 |
 |------|------|
-| `results/biofastfree_deg_results.csv` | 差异分析结果 |
-| `results/biofastfree_volcano.pdf` | 火山图 |
-| `results/biofastfree_kegg_enrichment.csv` | KEGG 富集表 |
-| `results/biofastfree_kegg_dotplot.pdf` | KEGG 点图 |
-| `results/biofastfree_go_enrichment.csv` | GO 富集表 |
-| `results/biofastfree_go_dotplot.pdf` | GO 点图 |
-| `results/biofastfree_tf_activity.csv` | TF 活性表 |
-| `results/biofastfree_tf_activity.pdf` | TF 活性图 |
+| `results/yuanseq_deg_results.csv` | 差异分析结果 |
+| `results/yuanseq_volcano.pdf` | 火山图 |
+| `results/yuanseq_kegg_enrichment.csv` | KEGG 富集表 |
+| `results/yuanseq_kegg_dotplot.pdf` | KEGG 点图 |
+| `results/yuanseq_go_enrichment.csv` | GO 富集表 |
+| `results/yuanseq_go_dotplot.pdf` | GO 点图 |
+| `results/yuanseq_tf_activity.csv` | TF 活性表 |
+| `results/yuanseq_tf_activity.pdf` | TF 活性图 |
 | `results/logs/` | 各步骤日志 |
 
 ## 与 Shiny 应用的对应关系
 
-| Snakemake 规则 | BioFastFree Shiny 模块 |
+| Snakemake 规则 | YuanSeq Shiny 模块 |
 |----------------|------------------------|
 | differential_analysis | data_input + differential_analysis |
 | volcano_plot | differential_analysis (火山图) |
@@ -138,4 +138,4 @@ snakemake -j 4
 
 ## 许可
 
-与 BioFastFree 主项目保持一致。
+与 YuanSeq 主项目保持一致。

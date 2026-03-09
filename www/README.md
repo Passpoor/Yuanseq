@@ -9,7 +9,7 @@
 - 支持所有Web静态资源：图片、CSS、JS等
 
 ## 当前文件
-- `logo.png` - BioFastFree应用Logo
+- `logo.png` - YuanSeq 应用 Logo
 
 ## 添加其他静态资源
 如需添加其他静态文件（如CSS、JS、图片等），可以直接放入此文件夹。

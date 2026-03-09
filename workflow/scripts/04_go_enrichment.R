@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # =====================================================
-# BioFastFree Snakemake - GO 富集分析
+# YuanSeq Snakemake - GO 富集分析
 # =====================================================
 
 suppressPackageStartupMessages({

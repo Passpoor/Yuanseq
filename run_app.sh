@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "================================================"
-echo "   RNAseq分析工具 v8.1 - 启动脚本"
+echo "   YuanSeq - 启动脚本"
 echo "================================================"
 echo
 
@@ -12,7 +12,7 @@ if ! command -v R &> /dev/null; then
     exit 1
 fi
 
-echo "正在启动RNAseq分析工具..."
+echo "正在启动 YuanSeq 分析工具..."
 echo
 
 # 运行应用

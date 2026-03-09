@@ -1,9 +1,9 @@
-# BioFastFree Snakemake - R 环境
+# YuanSeq Snakemake - R 环境
 # 使用: conda env create -f envs/environment.yaml
-# 激活: conda activate biofastfree
+# 激活: conda activate yuanseq
 # 注: decoupleR 可能需在 R 中单独安装: install.packages("decoupleR")
 
-name: biofastfree
+name: yuanseq
 
 channels:
   - conda-forge

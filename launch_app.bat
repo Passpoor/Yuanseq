@@ -1,6 +1,6 @@
 @echo off
 echo ========================================
-echo Biofree应用启动器
+echo YuanSeq 应用启动器
 echo ========================================
 echo.
 
@@ -13,11 +13,11 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo 正在启动Biofree应用...
+echo 正在启动 YuanSeq 应用...
 echo.
 
-REM 切换到项目目录
-cd /d "D:\cherry_code\Biofree_project11.2\Biofree_project"
+REM 切换到脚本所在目录（项目根目录）
+cd /d "%~dp0"
 
 REM 启动R并运行启动脚本
 Rscript.exe launch_app.R

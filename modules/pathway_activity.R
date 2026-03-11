@@ -1314,8 +1314,11 @@ pathway_activity_server <- function(input, output, session, deg_results, kegg_re
                 tags$li("基因去重逻辑有误")
               ),
               tags$span("✅ 解决方案：", style = "color: #27ae60;"),
-              "检查控制台调试信息，确认 KEGG 和 DEG 结果的 ID 类型一致。")
+      "检查控制台调试信息，确认 KEGG 和 DEG 结果的 ID 类型一致。")
       )
     )
   })
+
+  # 返回通路活性结果供其他模块使用
+  return(pathway_activity_results)
 }

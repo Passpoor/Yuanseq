@@ -87,6 +87,7 @@ source("modules/tf_activity.R")
 source("modules/pathway_activity.R")  # 🆕 通路活性分析模块
 source("modules/chip_analysis.R")      # 🆕 芯片数据分析模块
 source("modules/venn_diagram.R")
+source("modules/ai_interpretation.R")   # 🤖 AI 解读模块
 
 # ===============================
 # 主应用
@@ -158,16 +159,26 @@ server <- function(input, output, session) {
   gsea_analysis_server(input, output, session, deg_results)
 
   # 转录因子活性模块
-  tf_activity_server(input, output, session, deg_results)
+  tf_activity_results <- tf_activity_server(input, output, session, deg_results)
 
   # 🆕 通路活性分析模块
-  pathway_activity_server(input, output, session, deg_results, kegg_results)
+  pathway_activity_results <- pathway_activity_server(input, output, session, deg_results, kegg_results)
 
   # 韦恩图模块
   venn_diagram_server(input, output, session)
 
   # 🆕 芯片数据分析模块
   chip_analysis_server(input, output, session, deg_results)
+
+  # 🤖 AI 解读模块
+  ai_interpretation_server(
+    input, output, session,
+    deg_results = deg_results,
+    kegg_results = kegg_results,
+    go_results = go_results,
+    tf_activity_results = tf_activity_results,
+    pathway_activity_results = pathway_activity_results
+  )
 
 }
 

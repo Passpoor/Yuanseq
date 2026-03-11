@@ -1044,4 +1044,7 @@ tf_activity_server <- function(input, output, session, deg_results) {
     },
     contentType = "text/csv"
   )
+
+  # 返回 TF 活性结果供其他模块使用
+  return(tf_activity_results)
 }

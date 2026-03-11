@@ -24,6 +24,7 @@ biofree_users.sqlite
 # Config files (API keys)
 zhipu_config.RData
 api_config.RData
+api_config.json
 email_config.RData
 
 # Logs

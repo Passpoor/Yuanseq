@@ -1408,6 +1408,159 @@ main_app_ui <- function(initial_theme) {
                    # 🆕 芯片数据分析
                    tabPanel("🧬 芯片分析", icon = icon("microchip"),
                             uiOutput("chip_analysis_ui_output")
+                   ),
+
+                   # 🤖 AI 解读模块
+                   tabPanel("🤖 AI解读", icon = icon("robot"),
+                            sidebarLayout(
+                              sidebarPanel(
+                                width = 3,
+                                class = "sidebar-panel",
+
+                                # ========== 数据安全警告 ==========
+                                tags$div(
+                                  class = "alert alert-warning",
+                                  style = "padding: 10px; margin-bottom: 15px; font-size: 12px;",
+                                  tags$strong("⚠️ 数据安全提示"),
+                                  tags$br(),
+                                  "使用外部API会将分析数据发送到第三方服务器。",
+                                  tags$br(),
+                                  tags$strong("建议："),
+                                  tags$ul(
+                                    style = "margin: 5px 0; padding-left: 15px;",
+                                    tags$li("敏感数据请使用「本地模型」"),
+                                    tags$li("或部署私有API服务")
+                                  )
+                                ),
+
+                                # ========== API 配置 ==========
+                                h4("🔑 API 配置"),
+
+                                # 配置状态显示
+                                uiOutput("api_config_status"),
+
+                                tags$hr(),
+
+                                # API 提供商选择（可覆盖配置文件）
+                                tags$details(
+                                  tags$summary("⚙️ 临时覆盖设置"),
+                                  tags$p(class = "small text-muted", "可选：临时更改API设置（不保存）"),
+
+                                  selectInput("ai_provider", "API 提供商",
+                                              choices = c(
+                                                "OpenAI" = "openai",
+                                                "智谱AI (GLM)" = "zhipu",
+                                                "DeepSeek" = "deepseek",
+                                                "本地模型" = "local",
+                                                "自定义API" = "custom"
+                                              ),
+                                              selected = "deepseek"),
+
+                                  conditionalPanel(
+                                    condition = "input.ai_provider == 'custom'",
+                                    textInput("ai_custom_endpoint", "API 端点",
+                                              placeholder = "https://your-api.com/v1/chat/completions")
+                                  ),
+
+                                  uiOutput("ai_model_selector"),
+
+                                  passwordInput("ai_api_key", "API Key (临时)",
+                                                placeholder = "临时覆盖配置文件中的Key")
+                                ),
+
+                                tags$hr(),
+
+                                # ========== 样本信息输入 ==========
+                                h4("📋 样本信息"),
+                                tags$p(class = "small text-muted",
+                                       "提供样本背景信息，AI将生成更有针对性的解读"),
+
+                                textInput("sample_organism", "物种",
+                                          placeholder = "例如: Homo sapiens, Mus musculus"),
+
+                                textInput("sample_tissue", "组织/细胞类型",
+                                          placeholder = "例如: 肝脏, HeLa细胞, PBMC"),
+
+                                textInput("sample_condition", "实验处理",
+                                          placeholder = "例如: 药物处理24h, 缺氧刺激"),
+
+                                textInput("sample_control", "对照组",
+                                          placeholder = "例如: DMSO处理, 正常氧浓度"),
+
+                                textAreaInput("sample_description", "补充说明",
+                                              placeholder = "其他背景信息，如疾病模型、给药剂量等...",
+                                              rows = 3),
+
+                                tags$hr(),
+
+                                h4("📊 分析设置"),
+
+                                # 分析类型选择
+                                radioButtons("ai_analysis_type", "解读类型",
+                                             choices = c(
+                                               "综合报告" = "comprehensive",
+                                               "仅差异分析" = "deg_only",
+                                               "仅KEGG/GO" = "enrichment_only",
+                                               "仅TF活性" = "tf_only",
+                                               "仅通路活性" = "pathway_only"
+                                             ),
+                                             selected = "comprehensive"),
+
+                                # 语言选择
+                                selectInput("ai_language", "报告语言",
+                                            choices = c("中文", "English"),
+                                            selected = "中文"),
+
+                                # 高级选项
+                                tags$details(
+                                  tags$summary("⚙️ 高级选项"),
+                                  sliderInput("ai_temperature", "创造性 (Temperature)",
+                                              min = 0, max = 1, value = 0.7, step = 0.1),
+                                  numericInput("ai_max_tokens", "最大Token数",
+                                               value = 4000, min = 500, max = 8000, step = 500)
+                                ),
+
+                                tags$hr(),
+
+                                # 运行按钮
+                                actionButton("run_ai_interpretation", "🚀 生成AI解读",
+                                             class = "btn-primary btn-lg",
+                                             style = "width: 100%;"),
+
+                                tags$hr(),
+
+                                # 使用统计
+                                uiOutput("ai_usage_stats"),
+
+                                # 历史记录下载
+                                downloadButton("download_ai_history", "📥 下载历史记录",
+                                               class = "btn-sm btn-info",
+                                               style = "width: 100%; margin-top: 10px;")
+
+                              ),
+
+                              mainPanel(
+                                class = "main-panel",
+
+                                # 数据确认面板
+                                uiOutput("ai_data_summary"),
+
+                                tags$hr(),
+
+                                # AI 解读结果展示
+                                uiOutput("ai_interpretation_result"),
+
+                                # 导出按钮
+                                uiOutput("ai_export_buttons"),
+
+                                tags$hr(),
+
+                                # 历史记录
+                                h4("📜 历史记录"),
+                                DT::dataTableOutput("ai_history_table")
+
+                              )
+                            )
                    )
                  )
                )

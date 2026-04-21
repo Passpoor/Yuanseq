@@ -682,33 +682,42 @@ tf_activity_server <- function(input, output, session, deg_results) {
     grid_col <- if(input$theme_toggle) "#444444" else "#cccccc"
 
     ggplot(f_contrast_acts, aes(x = reorder(source, score), y = score)) +
-      geom_bar(aes(fill = score), stat = "identity") +
+      geom_bar(aes(fill = score), stat = "identity", width = input$tf_bar_width %||% 0.7) +
       scale_fill_gradient2(
         low = input$tf_inactive_col,
         high = input$tf_active_col,
         mid = "whitesmoke",
         midpoint = 0,
-        name = "TF 活性分数"
+        name = "TF 活性分数",
+        limits = c(-max(abs(f_contrast_acts$score), 1), max(abs(f_contrast_acts$score), 1))
       ) +
-      geom_hline(yintercept = 0, linetype = 'dashed', color = txt_col) +
-      theme_minimal() +
+      geom_hline(yintercept = 0, linetype = 'dashed', color = txt_col, linewidth = 0.5) +
       labs(
         x = "转录因子 (TFs)",
         y = "活性分数",
         title = paste("Top", n_tfs, "转录因子活性变化")
       ) +
+      theme_minimal(base_size = input$tf_bar_font_size %||% 11) +
       theme(
         panel.background = element_rect(fill = "transparent", colour = NA),
         plot.background = element_rect(fill = "transparent", colour = NA),
-        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5),
-        axis.title = element_text(color = txt_col, face = "bold", size = 12),
-        axis.text.x = element_text(angle = 45, hjust = 1, size = 10, face = "bold", color = txt_col),
-        axis.text.y = element_text(size = 10, face = "bold", color = txt_col),
-        legend.text = element_text(color = txt_col),
-        legend.title = element_text(color = txt_col),
-        axis.line = element_line(color = txt_col),
-        panel.grid.major = element_line(color = grid_col),
-        panel.grid.minor = element_line(color = grid_col)
+        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5,
+                                 size = (input$tf_bar_font_size %||% 11) * 1.3),
+        plot.title.position = "plot",
+        axis.title = element_text(color = txt_col, face = "bold",
+                                  size = (input$tf_bar_font_size %||% 11) * 1.05),
+        axis.text.x = element_text(angle = input$tf_bar_angle %||% 45, hjust = 1,
+                                    size = (input$tf_bar_font_size %||% 11) * 0.9,
+                                    face = "bold", color = txt_col),
+        axis.text.y = element_text(size = (input$tf_bar_font_size %||% 11) * 0.9,
+                                    face = "bold", color = txt_col),
+        legend.text = element_text(color = txt_col,
+                                    size = (input$tf_bar_font_size %||% 11) * 0.85),
+        legend.title = element_text(color = txt_col, face = "bold",
+                                    size = (input$tf_bar_font_size %||% 11) * 0.9),
+        axis.line = element_line(color = txt_col, linewidth = 0.5),
+        panel.grid.major = element_line(color = grid_col, linewidth = 0.3),
+        panel.grid.minor = element_blank()
       )
   })
 
@@ -861,10 +870,32 @@ tf_activity_server <- function(input, output, session, deg_results) {
   output$tf_target_plot <- renderPlot({
     req(selected_tf_targets())
 
+    # Explicit reactive dependencies (fix: %||% alone doesn't trigger re-render)
+    input$tf_scatter_point_size
+    input$tf_scatter_alpha
+    input$tf_scatter_label_size
+    input$tf_scatter_n_labels
+    input$tf_scatter_point_shape
+    input$tf_scatter_label_repel
+    input$tf_scatter_legend_pos
+    input$tf_scatter_title_size
+    input$tf_scatter_axis_size
+    input$tf_scatter_consis_col
+    input$tf_scatter_incon_col
+    input$tf_scatter_neutral_col
+
     point_size <- input$tf_scatter_point_size %||% 3
     point_alpha <- input$tf_scatter_alpha %||% 0.7
     label_size <- input$tf_scatter_label_size %||% 3
     n_labels <- input$tf_scatter_n_labels %||% 15
+    point_shape <- input$tf_scatter_point_shape %||% 19
+    use_repel <- input$tf_scatter_label_repel %||% TRUE
+    legend_pos <- input$tf_scatter_legend_pos %||% "right"
+    title_size <- input$tf_scatter_title_size %||% 14
+    axis_size <- input$tf_scatter_axis_size %||% 10
+    consis_col <- input$tf_scatter_consis_col %||% "#2ecc71"
+    incon_col <- input$tf_scatter_incon_col %||% "#e74c3c"
+    neutral_col <- input$tf_scatter_neutral_col %||% "#95a5a6"
 
     data_list <- selected_tf_targets()
     df <- data_list$data
@@ -874,27 +905,31 @@ tf_activity_server <- function(input, output, session, deg_results) {
     grid_col <- if(input$theme_toggle) "#444444" else "#cccccc"
 
     p <- ggplot(df, aes(x = log2FoldChange, y = -log10(pvalue))) +
-      geom_point(aes(color = Match_Status), size = point_size, alpha = point_alpha) +
+      geom_point(aes(color = Match_Status), size = point_size, alpha = point_alpha, shape = point_shape) +
       scale_color_manual(
-        values = c("Consistent" = "#2ecc71", "Inconsistent" = "#e74c3c", "Neutral/Unknown" = "#95a5a6"),
+        values = c("Consistent" = consis_col, "Inconsistent" = incon_col, "Neutral/Unknown" = neutral_col),
         name = "调控一致性"
       ) +
-      geom_vline(xintercept = 0, linetype = "dashed", color = txt_col, alpha = 0.7) +
-      geom_hline(yintercept = -log10(input$pval_cutoff), linetype = "dotted", color = txt_col, alpha = 0.7) +
+      geom_vline(xintercept = 0, linetype = "dashed", color = txt_col, alpha = 0.5) +
+      geom_hline(yintercept = -log10(input$pval_cutoff), linetype = "dotted", color = txt_col, alpha = 0.5) +
       labs(title = paste("TF:", tf_name, "靶基因差异表达"),
-           x = "log2(Fold Change)", y = "-log10(P Value)") +
+           x = expression(log[2](Fold~Change)), y = expression(-log[10](italic(P)~value))) +
       theme_minimal() +
       theme(
         panel.background = element_rect(fill = "transparent", colour = NA),
         plot.background = element_rect(fill = "transparent", colour = NA),
-        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5),
-        axis.title = element_text(color = txt_col, face = "bold"),
-        axis.text = element_text(color = txt_col),
-        legend.text = element_text(color = txt_col),
-        legend.title = element_text(color = txt_col),
-        axis.line = element_line(color = txt_col),
-        panel.grid.major = element_line(color = grid_col),
-        panel.grid.minor = element_line(color = grid_col)
+        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5, size = title_size),
+        plot.subtitle = element_text(color = txt_col, size = title_size * 0.85),
+        axis.title = element_text(color = txt_col, face = "bold", size = axis_size),
+        axis.text = element_text(color = txt_col, size = axis_size * 0.9),
+        axis.text.x = element_text(color = txt_col, size = axis_size * 0.9),
+        axis.text.y = element_text(color = txt_col, size = axis_size * 0.9),
+        legend.text = element_text(color = txt_col, size = axis_size * 0.85),
+        legend.title = element_text(color = txt_col, face = "bold", size = axis_size * 0.9),
+        legend.position = legend_pos,
+        axis.line = element_line(color = txt_col, linewidth = 0.5),
+        panel.grid.major = element_line(color = grid_col, linewidth = 0.3),
+        panel.grid.minor = element_blank()
       )
 
     if (n_labels > 0) {
@@ -904,15 +939,26 @@ tf_activity_server <- function(input, output, session, deg_results) {
         head(min(n_labels, nrow(df)))
 
       if (nrow(top_genes) > 0) {
-        top_genes <- top_genes %>%
-          mutate(label_x = log2FoldChange + ifelse(log2FoldChange > 0, 0.2, -0.2),
-                 label_y = -log10(pvalue) + 0.5)
+        if (use_repel && requireNamespace("ggrepel", quietly = TRUE)) {
+          p <- p + ggrepel::geom_text_repel(
+            data = top_genes, aes(label = SYMBOL),
+            size = label_size, color = txt_col, fontface = "bold",
+            max.overlaps = 20, box.padding = 0.5, point.padding = 0.3,
+            segment.color = txt_col, segment.alpha = 0.4,
+            min.segment.length = 0.1,
+            force = 0.5, force_pull = 0.3
+          )
+        } else {
+          top_genes <- top_genes %>%
+            mutate(label_x = log2FoldChange + ifelse(log2FoldChange > 0, 0.15, -0.15),
+                   label_y = -log10(pvalue) + 0.3)
 
-        p <- p +
-          geom_text(data = top_genes, aes(x = label_x, y = label_y, label = SYMBOL),
-                    size = label_size, color = txt_col, fontface = "bold",
-                    check_overlap = TRUE, vjust = 0.5,
-                    hjust = ifelse(top_genes$log2FoldChange > 0, 0, 1))
+          p <- p +
+            geom_text(data = top_genes, aes(x = label_x, y = label_y, label = SYMBOL),
+                      size = label_size, color = txt_col, fontface = "bold",
+                      check_overlap = TRUE, vjust = 0.5,
+                      hjust = ifelse(top_genes$log2FoldChange > 0, 0, 1))
+        }
       }
     }
 
@@ -1043,6 +1089,16 @@ tf_activity_server <- function(input, output, session, deg_results) {
 
   output$tf_network_plot <- renderPlot({
     req(selected_tf_targets())
+
+    # Explicit reactive dependencies
+    input$tf_network_node_size
+    input$tf_network_label_size
+    input$tf_tf_node_col
+    input$tf_consistent_act_col
+    input$tf_consistent_rep_col
+    input$tf_inconsistent_act_col
+    input$tf_inconsistent_rep_col
+    input$tf_neutral_col
 
     node_size_mult <- input$tf_network_node_size %||% 1
     label_size <- input$tf_network_label_size %||% 3.5
@@ -1352,29 +1408,39 @@ tf_activity_server <- function(input, output, session, deg_results) {
     txt_col <- if(input$theme_toggle) "white" else "black"
     grid_col <- if(input$theme_toggle) "#444444" else "#cccccc"
 
+    input$tf_family_font_size
+    input$tf_family_bar_width
+
     ggplot(df, aes(x = reorder(Family, -log10(Padj)), y = Fold_Enrichment)) +
-      geom_col(aes(fill = -log10(Padj)), width = 0.7) +
-      geom_hline(yintercept = 1, linetype = "dashed", color = "gray50") +
-      scale_fill_gradient(low = "#3498db", high = "#e74c3c", name = "-log10(Padj)") +
+      geom_col(aes(fill = -log10(Padj)), width = input$tf_family_bar_width %||% 0.7) +
+      geom_hline(yintercept = 1, linetype = "dashed", color = "gray50", linewidth = 0.5) +
+      scale_fill_gradient(low = "#3498db", high = "#e74c3c", name = expression(-log[10](italic(Padj)))) +
       labs(
         title = "TF 家族富集分析",
         subtitle = paste("显示 Top", nrow(df), "个显著家族"),
         x = "TF 家族",
         y = "富集倍数 (Fold Enrichment)"
       ) +
-      theme_minimal() +
+      theme_minimal(base_size = input$tf_family_font_size %||% 11) +
       theme(
         panel.background = element_rect(fill = "transparent", colour = NA),
         plot.background = element_rect(fill = "transparent", colour = NA),
-        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5),
-        plot.subtitle = element_text(color = txt_col, hjust = 0.5),
-        axis.title = element_text(color = txt_col, face = "bold"),
-        axis.text.x = element_text(angle = 45, hjust = 1, color = txt_col, face = "bold"),
-        axis.text.y = element_text(color = txt_col),
-        legend.text = element_text(color = txt_col),
-        legend.title = element_text(color = txt_col),
-        panel.grid.major = element_line(color = grid_col),
-        panel.grid.minor = element_line(color = grid_col)
+        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5,
+                                   size = (input$tf_family_font_size %||% 11) * 1.3),
+        plot.subtitle = element_text(color = txt_col, hjust = 0.5,
+                                      size = (input$tf_family_font_size %||% 11) * 0.9),
+        axis.title = element_text(color = txt_col, face = "bold",
+                                   size = (input$tf_family_font_size %||% 11) * 1.05),
+        axis.text.x = element_text(angle = 45, hjust = 1, color = txt_col, face = "bold",
+                                    size = (input$tf_family_font_size %||% 11) * 0.9),
+        axis.text.y = element_text(color = txt_col,
+                                    size = (input$tf_family_font_size %||% 11) * 0.9),
+        legend.text = element_text(color = txt_col,
+                                    size = (input$tf_family_font_size %||% 11) * 0.85),
+        legend.title = element_text(color = txt_col, face = "bold",
+                                    size = (input$tf_family_font_size %||% 11) * 0.9),
+        panel.grid.major = element_line(color = grid_col, linewidth = 0.3),
+        panel.grid.minor = element_blank()
       )
   })
 
@@ -1395,27 +1461,35 @@ tf_activity_server <- function(input, output, session, deg_results) {
     txt_col <- if(input$theme_toggle) "white" else "black"
     grid_col <- if(input$theme_toggle) "#444444" else "#cccccc"
 
+    input$tf_family_font_size
+
     ggplot(df, aes(x = Fold_Enrichment, y = reorder(Family, Fold_Enrichment))) +
-      geom_point(aes(size = N_Family_TFs, color = -log10(Padj)), alpha = 0.8) +
-      scale_color_gradient(low = "#3498db", high = "#e74c3c", name = "-log10(Padj)") +
-      scale_size_continuous(name = "家族TF数", range = c(3, 12)) +
-      geom_vline(xintercept = 1, linetype = "dashed", color = "gray50") +
+      geom_point(aes(size = N_Family_TFs, color = -log10(Padj)), alpha = 0.8, shape = 21, stroke = 0.5) +
+      scale_color_gradient(low = "#3498db", high = "#e74c3c", name = expression(-log[10](italic(Padj)))) +
+      scale_size_continuous(name = "家族TF数", range = c(3, 15)) +
+      scale_fill_gradient(low = "#3498db", high = "#e74c3c", guide = "none") +
+      geom_vline(xintercept = 1, linetype = "dashed", color = "gray50", linewidth = 0.5) +
       labs(
         title = "TF 家族富集气泡图",
         x = "富集倍数 (Fold Enrichment)",
         y = "TF 家族"
       ) +
-      theme_minimal() +
+      theme_minimal(base_size = input$tf_family_font_size %||% 11) +
       theme(
         panel.background = element_rect(fill = "transparent", colour = NA),
         plot.background = element_rect(fill = "transparent", colour = NA),
-        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5),
-        axis.title = element_text(color = txt_col, face = "bold"),
-        axis.text = element_text(color = txt_col, face = "bold"),
-        legend.text = element_text(color = txt_col),
-        legend.title = element_text(color = txt_col),
-        panel.grid.major = element_line(color = grid_col),
-        panel.grid.minor = element_line(color = grid_col)
+        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5,
+                                   size = (input$tf_family_font_size %||% 11) * 1.3),
+        axis.title = element_text(color = txt_col, face = "bold",
+                                   size = (input$tf_family_font_size %||% 11) * 1.05),
+        axis.text = element_text(color = txt_col, face = "bold",
+                                  size = (input$tf_family_font_size %||% 11) * 0.9),
+        legend.text = element_text(color = txt_col,
+                                    size = (input$tf_family_font_size %||% 11) * 0.85),
+        legend.title = element_text(color = txt_col, face = "bold",
+                                    size = (input$tf_family_font_size %||% 11) * 0.9),
+        panel.grid.major = element_line(color = grid_col, linewidth = 0.3),
+        panel.grid.minor = element_blank()
       )
   })
 
@@ -1454,34 +1528,43 @@ tf_activity_server <- function(input, output, session, deg_results) {
     txt_col <- if(input$theme_toggle) "white" else "black"
     grid_col <- if(input$theme_toggle) "#444444" else "#cccccc"
 
+    input$tf_family_font_size
+
     ggplot(family_activity, aes(x = reorder(Family, Mean_Score), y = Mean_Score)) +
       geom_segment(aes(x = Family, xend = Family, y = 0, yend = Mean_Score),
-                   linewidth = 1, color = "gray50") +
-      geom_point(aes(color = Mean_Score > 0, size = N_TFs), alpha = 0.9) +
+                   linewidth = 0.8, color = if(input$theme_toggle) "#666666" else "gray60") +
+      geom_point(aes(color = Mean_Score > 0, size = N_TFs), alpha = 0.9, shape = 21, stroke = 0.8) +
       scale_color_manual(
         values = c("TRUE" = "#e74c3c", "FALSE" = "#3498db"),
         name = "活性方向",
         labels = c("抑制", "激活")
       ) +
-      scale_size_continuous(name = "TF 数量", range = c(3, 10)) +
-      geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+      scale_size_continuous(name = "TF 数量", range = c(3, 12)) +
+      scale_fill_manual(values = c("TRUE" = "#e74c3c", "FALSE" = "#3498db"), guide = "none") +
+      geom_hline(yintercept = 0, linetype = "dashed", color = "gray50", linewidth = 0.5) +
       coord_flip() +
       labs(
         title = "TF 家族平均活性 (Lollipop 图)",
         x = "TF 家族",
         y = "平均活性分数"
       ) +
-      theme_minimal() +
+      theme_minimal(base_size = input$tf_family_font_size %||% 11) +
       theme(
         panel.background = element_rect(fill = "transparent", colour = NA),
         plot.background = element_rect(fill = "transparent", colour = NA),
-        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5),
-        axis.title = element_text(color = txt_col, face = "bold"),
-        axis.text = element_text(color = txt_col, face = "bold"),
-        legend.text = element_text(color = txt_col),
-        legend.title = element_text(color = txt_col),
-        panel.grid.major = element_line(color = grid_col),
-        panel.grid.minor = element_line(color = grid_col)
+        plot.title = element_text(color = txt_col, face = "bold", hjust = 0.5,
+                                   size = (input$tf_family_font_size %||% 11) * 1.3),
+        axis.title = element_text(color = txt_col, face = "bold",
+                                   size = (input$tf_family_font_size %||% 11) * 1.05),
+        axis.text = element_text(color = txt_col, face = "bold",
+                                  size = (input$tf_family_font_size %||% 11) * 0.9),
+        legend.text = element_text(color = txt_col,
+                                    size = (input$tf_family_font_size %||% 11) * 0.85),
+        legend.title = element_text(color = txt_col, face = "bold",
+                                    size = (input$tf_family_font_size %||% 11) * 0.9),
+        panel.grid.major.y = element_line(color = grid_col, linewidth = 0.3),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank()
       )
   })
 

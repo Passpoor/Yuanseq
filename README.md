@@ -29,7 +29,7 @@
 | 🔬 **Differential Expression** | RNA-seq / microarray DE analysis | limma-voom, edgeR; 1v1 / nvn comparisons |
 | 🧬 **Functional Enrichment** | KEGG, GO, GSEA analysis | clusterProfiler, local KEGG (no rate limit) |
 | 🛤️ **Pathway Activity** | Pathway activity inference | ULM, WMEAN, AUCell, GSVA (decoupleR) |
-| 🔬 **TF Activity** | Transcription factor activity | CollecTRI network + decoupleR |
+| 🔬 **TF Activity v2.0** | Transcription factor activity (DoRothEA confidence levels + TF family enrichment) | CollecTRI, DoRothEA (A-D) + decoupleR; Fisher exact test |
 | 🆕 **Single-Cell Support** | Downstream analysis for scRNA-seq cluster markers | Use cluster DEGs for enrichment & activity inference |
 | 🤖 **AI Interpretation** | AI-powered biological interpretation | DeepSeek, OpenAI, Zhipu AI, Local models |
 | 📊 **Visualization** | Interactive plots with sci-fi themed UI | ggplot2, plotly, pheatmap |
@@ -127,6 +127,55 @@ YuanSeq supports downstream analysis of **single-cell RNA-seq data**:
 - Compare biological programs across cell subpopulations
 
 ---
+
+
+---
+
+## 🔬 TF Activity v2.0
+
+The TF activity module has been upgraded with major new features:
+
+### 🆕 DoRothEA Database Support
+
+| Feature | CollecTRI | DoRothEA |
+|---------|-----------|----------|
+| Coverage | ~2,500 TFs | ~1,500 TFs |
+| Confidence levels | None | A/B/C/D four-level grading |
+| Best for | Comprehensive exploration | High-confidence validation |
+
+**Confidence Levels:**
+- **A** (Highest): Orthogonal experimental validation (ChIP + KO)
+- **B** (High): Multiple high-throughput experiments
+- **C** (Medium): Expert-reviewed computational predictions
+- **D** (Low): Single-source evidence
+
+> 💡 **Recommendation**: Use A+B for publication-grade analysis; A-D for exploratory analysis.
+
+### 🆕 TF Family Enrichment Analysis
+
+Based on **Lambert et al. 2018 (Cell)**, the module now supports:
+
+- **30+ TF families** (bZIP, bHLH, Homeobox, Nuclear Receptor, ETS, Forkhead, C2H2_ZF, etc.)
+- **Fisher exact test** for family enrichment significance
+- **BH correction** for multiple testing
+- **Rich visualizations**: Enrichment bar chart, bubble chart, Lollipop plot
+
+### Update Instructions
+
+For users who already installed YuanSeq:
+
+```r
+# Simply reinstall to get the update
+remotes::install_github("Passpoor/Yuanseq", upgrade = "never", force = TRUE)
+
+# Then launch as usual
+YuanSeq::run_app()
+```
+
+**References:**
+1. Lambert et al. (2018) The Human Transcription Factors. *Cell* 172(4):650-665.
+2. Garcia-Alonso et al. (2019) Benchmark and integration of resources for the estimation of human transcription factor activities. *Genome Biology* 20:240.
+3. Badia-i-Mompel et al. (2022) decoupleR. *Bioinformatics* 38(22):5174-5176.
 
 ## 🙏 Acknowledgments
 

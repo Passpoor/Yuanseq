@@ -1,8 +1,8 @@
 Package: YuanSeq
 Type: Shiny
 Title: RNA-seq, Microarray and Single-Cell Downstream Analysis Platform
-Version: 1.0.0
-Date: 2026-03-11
+Version: 1.1.0
+Date: 2026-04-21
 Authors@R: c(
     person("Yu", "Qiao", , "yu.qiao@sjtu.edu.cn", role = c("aut", "cre"),
            comment = "PhD in Pharmacology, SJTU School of Pharmacy"),
@@ -12,7 +12,8 @@ Authors@R: c(
 Description: A comprehensive R/Shiny platform for RNA-seq, microarray and
     single-cell cluster-derived pseudobulk downstream analysis. Supports
     differential expression (limma-voom, edgeR), functional enrichment
-    (KEGG, GO, GSEA), pathway and TF activity inference (decoupleR),
+    (KEGG, GO, GSEA), pathway and TF activity inference (CollecTRI, DoRothEA
+    with A-D confidence levels, TF family enrichment via Fisher exact test),
     and AI-powered biological interpretation.
 License: MIT + file LICENSE
 URL: https://github.com/Passpoor/Yuanseq

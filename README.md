@@ -92,7 +92,7 @@ Edit `api_config.json` with your API key:
 
 ---
 
-### Alternative: Local Install
+### Alternative 1: Local Install
 
 ```bash
 git clone https://github.com/Passpoor/Yuanseq.git
@@ -103,6 +103,38 @@ cd Yuanseq
 source("install.R")  # Install dependencies
 source("run.R")      # Launch app
 ```
+
+### Alternative 2: Pixi (Recommended for reproducible environments)
+
+[Pixi](https://pixi.sh/) provides cross-platform, lockfile-based environment management using conda-forge and bioconda packages.
+
+**Prerequisites:** [Install pixi](https://pixi.sh/latest/#installation)
+
+```bash
+git clone https://github.com/Passpoor/Yuanclaw.git
+cd Yuanclaw
+
+# Install all dependencies
+pixi install
+
+# First-time setup: link R config + install extra packages
+pixi run setup
+
+# Launch the app
+pixi run app
+```
+
+**Available commands:**
+
+| Command | Description |
+|---------|-------------|
+| `pixi install` | Install conda/bioconda dependencies |
+| `pixi run setup` | First-time setup (R config + extras) |
+| `pixi run app` | Launch Shiny app on port 3838 |
+| `pixi run test` | Run tests |
+| `pixi run check-r` | Check R version |
+
+> **Note:** `config/Rprofile.site` automatically adds system R packages to the pixi library path, so bioconductor annotation databases (GO.db, org.Hs.eg.db, org.Mm.eg.db, etc.) already installed on your system are reused without re-downloading.
 
 ---
 

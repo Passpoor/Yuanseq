@@ -155,7 +155,7 @@
                                            tags$hr(),
                                            h4("所选 TF 靶基因调控一致性散点图"),
                                            p(class="text-muted", "图中的颜色显示了靶基因的实际差异表达方向与 TF 调控网络预设方向的匹配程度。"),
-                                           uiOutput("tf_consistency_summary"),
+                                           textOutput("tf_consistency_summary"),
                                            tags$br(),
                                            plotOutput("tf_target_plot", height = "600px"),
 

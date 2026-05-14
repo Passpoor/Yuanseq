@@ -283,9 +283,10 @@ get_tf_family_map <- function(species = "human") {
     data.frame(TF = tf_families[[fam]], Family = fam, stringsAsFactors = FALSE)
   }))
 
-  # 去重：一个 TF 可能属于多个家族，取第一个
+  # 保留多家族归属：一个 TF 可能属于多个家族（如 TCF3 同时属于 bHLH 和 HMG）
+  # 去除完全重复的行（同一 TF-家族对），但保留不同的家族映射
   family_df <- family_df %>%
-    distinct(TF, .keep_all = TRUE)
+    distinct(TF, Family, .keep_all = TRUE)
 
   return(family_df)
 }
@@ -327,11 +328,12 @@ tf_family_enrichment <- function(tf_results, tf_family_map,
 
     # 构建列联表
     a <- sum(foreground %in% family_tfs)  # foreground 中属于该家族
-    b <- sum(!(foreground %in% family_tfs))  # foreground 中不属于
+    b <- length(foreground) - a            # foreground 中不属于
     c <- sum(background %in% family_tfs) - a  # background 中属于（排除 foreground）
-    d <- sum(!(background %in% family_tfs)) - b  # background 中不属于
+    d <- length(background) - a - b - c    # background 中不属于
 
-    if ((a + c) < 2) return(NULL)  # 家族 TF 太少
+    # 边界检查
+    if (any(c(a, b, c, d) < 0) || (a + c) < 2) return(NULL)
 
     # Fisher 精确检验
     mat <- matrix(c(a, b, c, d), nrow = 2)
@@ -404,9 +406,16 @@ tf_activity_server <- function(input, output, session, deg_results) {
     }
   })
 
+  # 缓存目录：应用根目录下的 .cache
+  cache_dir <- reactiveVal({
+    d <- file.path(getwd(), ".cache")
+    if (!dir.exists(d)) dir.create(d, recursive = TRUE, showWarnings = FALSE)
+    d
+  })
+
   # 加载 CollecTRI 数据库
   load_collectri <- function(organism_code) {
-    current_file <- paste0("collectri_", organism_code, ".rds")
+    current_file <- file.path(cache_dir(), paste0("collectri_", organism_code, ".rds"))
 
     if (file.exists(current_file)) {
       showNotification(paste0("正在从本地加载 CollecTRI (", organism_code, ")..."),
@@ -437,7 +446,7 @@ tf_activity_server <- function(input, output, session, deg_results) {
 
   # 加载 DoRothEA 数据库（带置信度分级）
   load_dorothea <- function(organism_code) {
-    cache_file <- paste0("dorothea_", organism_code, ".rds")
+    cache_file <- file.path(cache_dir(), paste0("dorothea_", organism_code, ".rds"))
 
     if (file.exists(cache_file)) {
       showNotification(paste0("正在从本地加载 DoRothEA (", organism_code, ")..."),
@@ -950,8 +959,8 @@ tf_activity_server <- function(input, output, session, deg_results) {
           )
         } else {
           top_genes <- top_genes %>%
-            mutate(label_x = log2FoldChange + ifelse(log2FoldChange > 0, 0.15, -0.15),
-                   label_y = -log10(pvalue) + 0.3)
+            mutate(label_x = .data$log2FoldChange + ifelse(.data$log2FoldChange > 0, 0.15, -0.15),
+                   label_y = -log10(.data$pvalue) + 0.3)
 
           p <- p +
             geom_text(data = top_genes, aes(x = label_x, y = label_y, label = SYMBOL),
@@ -1299,8 +1308,8 @@ tf_activity_server <- function(input, output, session, deg_results) {
         top_genes <- df %>% filter(!is.na(pvalue)) %>% arrange(pvalue) %>% head(min(n_labels, nrow(df)))
         if (nrow(top_genes) > 0) {
           top_genes <- top_genes %>%
-            mutate(label_x = log2FoldChange + ifelse(log2FoldChange > 0, 0.2, -0.2),
-                   label_y = -log10(pvalue) + 0.5)
+            mutate(label_x = .data$log2FoldChange + ifelse(.data$log2FoldChange > 0, 0.2, -0.2),
+                   label_y = -log10(.data$pvalue) + 0.5)
           p <- p + geom_text(data = top_genes, aes(x = label_x, y = label_y, label = SYMBOL),
                              size = label_size, color = "black", fontface = "bold",
                              check_overlap = TRUE, vjust = 0.5,

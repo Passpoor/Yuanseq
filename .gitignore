@@ -2,7 +2,7 @@
 .Rhistory
 .RData
 .RDataTmp
-.Rproj.user
+.Rproj.user/
 .Renviron
 
 # User / project data - do not upload
@@ -21,15 +21,20 @@ shiny_app.*
 *.sqlite-wal
 biofree_users.sqlite
 
-# Config files (API keys)
+# Config files and local credentials
 zhipu_config.RData
 api_config.RData
 api_config.json
 email_config.RData
+.yuanseq/
+*.key
+*.pem
+*.secret
 
 # Logs
 omnipathr-log/
 debug-*.log
+*.log
 
 # Temporary files
 *.tmp
@@ -46,7 +51,6 @@ desktop.ini
 .idea/
 *.swp
 *.swo
-*~
 
 # Test outputs
 test_*.rds

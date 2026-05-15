@@ -16,8 +16,8 @@ Description: A comprehensive R/Shiny platform for RNA-seq, microarray and
     with A-D confidence levels, TF family enrichment via Fisher exact test),
     and AI-powered biological interpretation.
 License: MIT + file LICENSE
-URL: https://github.com/Passpoor/Yuanseq
-BugReports: https://github.com/Passpoor/Yuanseq/issues
+URL: https://github.com/Passpoor/Yuanclaw
+BugReports: https://github.com/Passpoor/Yuanclaw/issues
 Encoding: UTF-8
 LazyData: true
 NeedsCompilation: no
